@@ -57,6 +57,7 @@ public class TapTarget {
     private int dimColor = -1;
     private int titleTextColor = -1;
     private int descriptionTextColor = -1;
+    private int targetCircleRadius = -1;
 
     @DimenRes private int titleTextDimen = -1;
     @DimenRes private int descriptionTextDimen = -1;
@@ -303,6 +304,11 @@ public class TapTarget {
         return this;
     }
 
+    public TapTarget targetCircleRadius(@ColorRes int radius) {
+        this.targetCircleRadius = radius;
+        return this;
+    }
+
     /**
      * Specify the color resource to use as a dim effect
      * <p>
@@ -407,6 +413,10 @@ public class TapTarget {
 
     int dimColorInt(Context context) {
         return colorResOrInt(context, dimColor, dimColorRes);
+    }
+
+    int targetCircleRadius() {
+        return this.targetCircleRadius;
     }
 
     int titleTextColorInt(Context context) {

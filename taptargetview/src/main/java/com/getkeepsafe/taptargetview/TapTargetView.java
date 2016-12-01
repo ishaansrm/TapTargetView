@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Keepsafe Software, Inc.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -76,7 +76,8 @@ public class TapTargetView extends View {
     final int GUTTER_DIM;
     final int SHADOW_DIM;
 
-    @Nullable final ViewGroup boundingParent;
+    @Nullable
+    final ViewGroup boundingParent;
     final ViewManager parent;
     final TapTarget target;
     final Rect targetBounds;
@@ -91,8 +92,10 @@ public class TapTargetView extends View {
 
     CharSequence title;
     StaticLayout titleLayout;
-    @Nullable CharSequence description;
-    @Nullable StaticLayout descriptionLayout;
+    @Nullable
+    CharSequence description;
+    @Nullable
+    StaticLayout descriptionLayout;
     boolean isDark;
     boolean debug;
     boolean shouldTintTarget;
@@ -198,7 +201,8 @@ public class TapTargetView extends View {
          * Signals that the tap target has been dismissed
          * @param userInitiated Whether the user caused this action
          */
-        public void onTargetDismissed(TapTargetView view, boolean userInitiated) {}
+        public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+        }
     }
 
     final FloatValueAnimatorBuilder.UpdateListener expandContractUpdateListener = new FloatValueAnimatorBuilder.UpdateListener() {
@@ -354,7 +358,7 @@ public class TapTargetView extends View {
 
         TARGET_PADDING = UiUtil.dp(context, 20);
         CIRCLE_PADDING = UiUtil.dp(context, 40);
-        TARGET_RADIUS = UiUtil.dp(context, 44);
+        TARGET_RADIUS = target.targetCircleRadius() == -1 ? UiUtil.dp(context, 44) : target.targetCircleRadius();
         TEXT_PADDING = UiUtil.dp(context, 40);
         TEXT_SPACING = UiUtil.dp(context, 8);
         GUTTER_DIM = UiUtil.dp(context, 88);
@@ -437,7 +441,7 @@ public class TapTargetView extends View {
 
                 final boolean clickedInTarget = targetBounds.contains((int) lastTouchX, (int) lastTouchY);
                 final double distanceToOuterCircleCenter = distance(outerCircleCenter[0], outerCircleCenter[1],
-                                           (int) lastTouchX, (int) lastTouchY);
+                        (int) lastTouchX, (int) lastTouchY);
                 final boolean clickedInsideOfOuterCircle = distanceToOuterCircleCenter <= outerCircleRadius;
 
                 if (clickedInTarget) {
@@ -592,11 +596,13 @@ public class TapTargetView extends View {
         int saveCount;
         outerCirclePaint.setAlpha(outerCircleAlpha);
         if (shouldDrawShadow && outlineProvider == null) {
-            saveCount = c.save(); {
+            saveCount = c.save();
+            {
                 c.clipPath(outerCirclePath, Region.Op.DIFFERENCE);
                 outerCircleShadowPaint.setAlpha((int) (0.20f * outerCircleAlpha));
                 c.drawCircle(outerCircleCenter[0], outerCircleCenter[1], outerCircleRadius, outerCircleShadowPaint);
-            } c.restoreToCount(saveCount);
+            }
+            c.restoreToCount(saveCount);
         }
         c.drawCircle(outerCircleCenter[0], outerCircleCenter[1], outerCircleRadius, outerCirclePaint);
 
@@ -609,7 +615,8 @@ public class TapTargetView extends View {
         c.drawCircle(targetBounds.centerX(), targetBounds.centerY(),
                 targetCircleRadius, targetCirclePaint);
 
-        saveCount = c.save(); {
+        saveCount = c.save();
+        {
             c.clipPath(outerCirclePath);
             c.translate(textBounds.left, textBounds.top);
             titlePaint.setAlpha(textAlpha);
@@ -620,16 +627,18 @@ public class TapTargetView extends View {
                 descriptionPaint.setAlpha((int) (0.54f * textAlpha));
                 descriptionLayout.draw(c);
             }
-        } c.restoreToCount(saveCount);
+        }
+        c.restoreToCount(saveCount);
 
-        saveCount = c.save(); {
+        saveCount = c.save();
+        {
             if (tintedTarget != null) {
                 c.translate(targetBounds.centerX() - tintedTarget.getWidth() / 2,
-                            targetBounds.centerY() - tintedTarget.getHeight() / 2);
+                        targetBounds.centerY() - tintedTarget.getHeight() / 2);
                 c.drawBitmap(tintedTarget, 0, 0, targetCirclePaint);
             } else if (target.icon != null) {
                 c.translate(targetBounds.centerX() - target.icon.getBounds().width() / 2,
-                            targetBounds.centerY() - target.icon.getBounds().height() / 2);
+                        targetBounds.centerY() - target.icon.getBounds().height() / 2);
                 target.icon.setAlpha(targetCirclePaint.getAlpha());
                 target.icon.draw(c);
             }
@@ -794,7 +803,7 @@ public class TapTargetView extends View {
 
     int[] getOuterCircleCenterPoint() {
         if (inGutter(targetBounds.centerY())) {
-            return new int[] {targetBounds.centerX(), targetBounds.centerY()};
+            return new int[]{targetBounds.centerX(), targetBounds.centerY()};
         }
 
         final int targetRadius = Math.max(targetBounds.width(), targetBounds.height()) / 2 + TARGET_PADDING;
@@ -809,7 +818,7 @@ public class TapTargetView extends View {
                 :
                 targetBounds.centerY() + TARGET_RADIUS + TARGET_PADDING + titleLayout.getHeight();
 
-        return new int[] {(left + right) / 2, centerY};
+        return new int[]{(left + right) / 2, centerY};
     }
 
     int getTotalTextHeight() {
